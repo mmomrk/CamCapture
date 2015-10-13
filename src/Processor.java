@@ -119,14 +119,12 @@ public class Processor
 
     Point pw1,pw2;
 
-    System.out.println(p1+""+p2);
     if (abs(deltaY/deltaX) < 1)
     {
       pw1 = p1;
       pw2 = p2;
     } else
     {
-      System.out.println("flipped");
       pw1 = flipXY(p1);
       pw2 = flipXY(p2);
 
@@ -145,7 +143,6 @@ public class Processor
 
     double y0 = b + k*leftX;
     double y1 = b + k*rightX;
-    System.out.println("y0 "+y0+"  y1: "+y1+"  topy:"+topY+"  boty"+bottomY);
 
     if ( pointsAround(pw1,pw2,new Point(leftX,0))  &  (topY < y0 & y0 < bottomY) )
     {
