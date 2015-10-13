@@ -146,12 +146,10 @@ public class Processor
 
     if ( pointsAround(pw1,pw2,new Point(leftX,0))  &  (topY < y0 & y0 < bottomY) )
     {
-      System.out.println("2 type");
       return 2;
     }
     if ( pointsAround(pw1,pw2,new Point(rightX,0))  &   (topY < y1 & y1 < bottomY) )
     {
-      System.out.println("2 type");
       return 2;
     }
 
@@ -190,9 +188,10 @@ public class Processor
 
     int rho = 1;
     float theta = (float) (3.14/180);
-    int thresh = 30;
+    int thresh = 50;
     int minLenght = 40;
-    int maxGap = 20;
+    int maxGap = 5;
+
 
 //    Mat lines = new Mat( inputImage.rows(),inputImage.cols(), CvType.CV_8UC1);
     Mat lines = new Mat();
@@ -200,6 +199,7 @@ public class Processor
     for (int it=0; it<3;it++)
     {
       edges = edgesA[it].clone();
+      System.out.println("finding lines in 0raw 1bilat 2median "+it);
 
       Imgproc.HoughLinesP(edges, lines, rho, theta, thresh, minLenght, maxGap);
 
@@ -208,7 +208,6 @@ public class Processor
       for (int i = 0; i < lines.rows(); i++)
       {
         linesA[i] = lines.get(i, 0);
-
       }
 
       Mat linedImage = new Mat();
@@ -227,12 +226,23 @@ public class Processor
             break;
           case 1:
             color = new Scalar(250, 50, 120);
-                    break;
+
+            double[] alphaRho = getAlphaRho(p1,p2,inputImage.size());
+            System.out.println("points " + p1 + p2 + ";\t alpha rho " + alphaRho[0] + "\t" + alphaRho[1]);
+
+            Point center = new Point(linedImage.size().width/2,linedImage.size().height/2);
+
+            Imgproc.line(linedImage, center ,new Point(center.x+alphaRho[1]*cos(alphaRho[0]+PI/2),center.y+alphaRho[1]*sin(alphaRho[0]+PI/2)),new Scalar(200,200,100));
+            break;
           case 2:
             color = new Scalar(25, 250, 120);
-            System.out.println(p1+""+p2);
+
         }
-        Imgproc.line(linedImage, p1, p2,  color , 2);
+
+
+
+
+        Imgproc.line(linedImage, p1, p2, color, 2);
       }
       switch (it)
       {
